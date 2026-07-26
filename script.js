@@ -313,3 +313,98 @@ data:[65,25,10]
 });
 
 }
+const modal=document.getElementById("customerModal");
+
+const addBtn=document.getElementById("addCustomerBtn");
+
+const saveBtn=document.getElementById("saveCustomer");
+
+const tbody=document.querySelector("tbody");
+
+addBtn.onclick=(e)=>{
+
+e.preventDefault();
+
+modal.classList.add("active");
+
+};
+
+modal.onclick=(e)=>{
+
+if(e.target===modal){
+
+modal.classList.remove("active");
+
+}
+
+};
+
+saveBtn.onclick=()=>{
+
+const name=document.getElementById("customerName").value;
+
+const company=document.getElementById("customerCompany").value;
+
+const revenue=document.getElementById("customerRevenue").value;
+
+if(name===""||company==="") return;
+
+const customers=
+
+JSON.parse(localStorage.getItem("customers"))||[];
+
+customers.push({
+
+name,
+
+company,
+
+revenue
+
+});
+
+localStorage.setItem(
+
+"customers",
+
+JSON.stringify(customers)
+
+);
+
+loadCustomers();
+
+modal.classList.remove("active");
+
+};
+
+function loadCustomers(){
+
+const customers=
+
+JSON.parse(localStorage.getItem("customers"))||[];
+
+tbody.innerHTML="";
+
+customers.forEach(c=>{
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>${c.name}</td>
+
+<td>${c.company}</td>
+
+<td><span class="status active">Active</span></td>
+
+<td>$${c.revenue}</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+loadCustomers();
