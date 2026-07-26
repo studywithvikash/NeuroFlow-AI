@@ -1096,3 +1096,7 @@ transform:scale(1);
 .badge{
 animation:pulse 2s infinite;
 }
+canvas{
+width:100%!important;
+height:320px!important;
+}
