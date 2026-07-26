@@ -254,3 +254,62 @@ badge.innerText=count;
 // ==============================
 
 console.log("🚀 ClientFlow CRM Loaded Successfully");
+// Revenue Chart
+
+const salesCanvas=document.getElementById("salesChart");
+
+if(salesCanvas){
+
+new Chart(salesCanvas,{
+
+type:"line",
+
+data:{
+
+labels:["Jan","Feb","Mar","Apr","May","Jun"],
+
+datasets:[{
+
+label:"Revenue",
+
+data:[12,18,15,25,30,38],
+
+borderWidth:3,
+
+tension:.4,
+
+fill:true
+
+}]
+
+}
+
+});
+
+}
+
+// Customer Chart
+
+const customerCanvas=document.getElementById("customerChart");
+
+if(customerCanvas){
+
+new Chart(customerCanvas,{
+
+type:"doughnut",
+
+data:{
+
+labels:["Active","New","Inactive"],
+
+datasets:[{
+
+data:[65,25,10]
+
+}]
+
+}
+
+});
+
+}
