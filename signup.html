@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ClientFlow CRM | Create Account</title>
+
+<meta name="description" content="Create your ClientFlow CRM account">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<link rel="stylesheet" href="auth.css">
+
+</head>
+
+<body>
+
+<div class="auth-container">
+
+<div class="auth-card">
+
+<div class="logo">
+
+<i class="fa-solid fa-chart-line"></i>
+
+<h1>ClientFlow CRM</h1>
+
+<p>Create Your Account 🚀</p>
+
+</div>
+
+<form id="signupForm">
+
+<div class="input-group">
+
+<label>Full Name</label>
+
+<div class="input-box">
+
+<i class="fa-solid fa-user"></i>
+
+<input
+type="text"
+id="signupName"
+placeholder="Enter your full name"
+required>
+
+</div>
+
+</div>
+
+<div class="input-group">
+
+<label>Email Address</label>
+
+<div class="input-box">
+
+<i class="fa-solid fa-envelope"></i>
+
+<input
+type="email"
+id="signupEmail"
+placeholder="Enter your email"
+required>
+
+</div>
+
+</div>
+
+<div class="input-group">
+
+<label>Password</label>
+
+<div class="input-box">
+
+<i class="fa-solid fa-lock"></i>
+
+<input
+type="password"
+id="signupPassword"
+placeholder="Create a password"
+required>
+
+<button
+type="button"
+id="toggleSignupPassword"
+class="eye-btn">
+
+<i class="fa-solid fa-eye"></i>
+
+</button>
+
+</div>
+
+</div>
+
+<div class="input-group">
+
+<label>Confirm Password</label>
+
+<div class="input-box">
+
+<i class="fa-solid fa-lock"></i>
+
+<input
+type="password"
+id="confirmPassword"
+placeholder="Confirm password"
+required>
+
+</div>
+
+</div>
+
+<label class="terms">
+
+<input type="checkbox" required>
+
+I agree to the Terms & Conditions and Privacy Policy.
+
+</label>
+
+<button
+type="submit"
+class="login-btn">
+
+<i class="fa-solid fa-user-plus"></i>
+
+Create Account
+
+</button>
+
+<p class="auth-link">
+
+Already have an account?
+
+<a href="login.html">
+
+Login Here
+
+</a>
+
+</p>
+
+</form>
+
+</div>
+<!-- =====================================
+     Right Side Branding Panel
+====================================== -->
+
+<div class="auth-side">
+
+    <div class="overlay">
+
+        <h2>Start Growing with ClientFlow CRM</h2>
+
+        <p>
+            Create your account to manage customers,
+            track sales, generate reports, and grow
+            your business from one modern dashboard.
+        </p>
+
+        <div class="feature-list">
+
+            <div class="feature-item">
+                <i class="fa-solid fa-users"></i>
+                <span>Unlimited Customers</span>
+            </div>
+
+            <div class="feature-item">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Sales Dashboard</span>
+            </div>
+
+            <div class="feature-item">
+                <i class="fa-solid fa-file-invoice"></i>
+                <span>Reports & Analytics</span>
+            </div>
+
+            <div class="feature-item">
+                <i class="fa-solid fa-cloud"></i>
+                <span>Cloud Ready</span>
+            </div>
+
+        </div>
+
+        <div class="security-badges">
+
+            <span>
+                <i class="fa-solid fa-lock"></i>
+                Secure Signup
+            </span>
+
+            <span>
+                <i class="fa-solid fa-shield-halved"></i>
+                Protected Data
+            </span>
+
+            <span>
+                <i class="fa-solid fa-bolt"></i>
+                Fast & Responsive
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+<!-- End auth-container -->
+
+<script src="auth.js"></script>
+
+</body>
+</html>
