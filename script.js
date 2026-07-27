@@ -1,357 +1,114 @@
 /*=========================================
-  ClientFlow CRM Dashboard
-  script.js
+ ClientFlow CRM v2.0
+ script.js - Part 1
 ==========================================*/
 
-// ==============================
-// Dark / Light Mode
-// ==============================
+// Theme Toggle
 
 const themeToggle = document.getElementById("theme-toggle");
 
-if (localStorage.getItem("theme") === "light") {
-    document.body.classList.add("light-mode");
-    if (themeToggle) {
-        themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
-    }
-}
-
 if (themeToggle) {
 
-    themeToggle.addEventListener("click", () => {
-
-        document.body.classList.toggle("light-mode");
-
-        if (document.body.classList.contains("light-mode")) {
-
-            localStorage.setItem("theme", "light");
-            themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
-
-        } else {
-
-            localStorage.setItem("theme", "dark");
-            themeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
-
-        }
-
-    });
-
-}
-
-// ==============================
-// Sidebar Toggle (Mobile)
-// ==============================
-
-const sidebar = document.querySelector(".sidebar");
-
-const menuButton = document.createElement("button");
-
-menuButton.innerHTML = '<i class="fa-solid fa-bars"></i>';
-
-menuButton.className = "mobile-menu-btn";
-
-document.body.appendChild(menuButton);
-
-menuButton.addEventListener("click", () => {
-
-    sidebar.classList.toggle("active");
-
-});
-
-// ==============================
-// Active Sidebar Menu
-// ==============================
-
-const menuItems = document.querySelectorAll(".sidebar-menu li");
-
-menuItems.forEach(item => {
-
-    item.addEventListener("click", () => {
-
-        menuItems.forEach(i => i.classList.remove("active"));
-
-        item.classList.add("active");
-
-    });
-
-});
-
-// ==============================
-// Search Filter
-// ==============================
-
-const searchInput = document.querySelector(".search-box input");
-
-const rows = document.querySelectorAll("tbody tr");
-
-if(searchInput){
-
-searchInput.addEventListener("keyup", function(){
-
-const value = this.value.toLowerCase();
-
-rows.forEach(row=>{
-
-const text=row.innerText.toLowerCase();
-
-row.style.display=text.includes(value)?"":"none";
-
-});
-
-});
-
-}
-
-// ==============================
-// Notification Click
-// ==============================
-
-const notification = document.querySelector(".notification");
-
-if(notification){
-
-notification.addEventListener("click",()=>{
-
-alert("You have 5 new notifications.");
-
-});
-
-}
-
-// ==============================
-// Stat Card Hover Effect
-// ==============================
-
-const statCards = document.querySelectorAll(".stat-card");
-
-statCards.forEach(card=>{
-
-card.addEventListener("mouseenter",()=>{
-
-card.style.transform="translateY(-10px) scale(1.02)";
-
-});
-
-card.addEventListener("mouseleave",()=>{
-
-card.style.transform="translateY(0) scale(1)";
-
-});
-
-});
-
-// ==============================
-// Animated Counter
-// ==============================
-
-const counters=document.querySelectorAll(".stat-card h2");
-
-counters.forEach(counter=>{
-
-const target=counter.innerText;
-
-const number=parseFloat(target.replace(/[^\d.]/g,""));
-
-if(isNaN(number)) return;
-
-let current=0;
-
-const increment=number/60;
-
-const update=()=>{
-
-current+=increment;
-
-if(current<number){
-
-if(target.includes("%")){
-
-counter.innerText=current.toFixed(0)+"%";
-
-}else if(target.includes("$")){
-
-counter.innerText="$"+Math.floor(current).toLocaleString();
-
-}else{
-
-counter.innerText=Math.floor(current).toLocaleString();
-
-}
-
-requestAnimationFrame(update);
-
-}else{
-
-counter.innerText=target;
-
-}
-
-};
-
-update();
-
-});
-
-// ==============================
-// Fade In Animation
-// ==============================
-
-const cards=document.querySelectorAll(
-".stat-card,.chart-card,.pipeline-card,.table-card,.activity-card,.team-card,.calendar-card,.notification-card,.action-btn"
+themeToggle.addEventListener("click", () => {
+
+document.body.classList.toggle("light-mode");
+
+localStorage.setItem(
+"theme",
+document.body.classList.contains("light-mode")
+? "light"
+: "dark"
 );
 
-const reveal=()=>{
-
-cards.forEach(card=>{
-
-const top=card.getBoundingClientRect().top;
-
-if(top<window.innerHeight-80){
-
-card.style.opacity="1";
-card.style.transform="translateY(0)";
-
-}
-
-});
-
-};
-
-cards.forEach(card=>{
-
-card.style.opacity="0";
-card.style.transform="translateY(40px)";
-card.style.transition=".7s";
-
-});
-
-window.addEventListener("scroll",reveal);
-
-window.addEventListener("load",reveal);
-
-// ==============================
-// Fake Live Notification
-// ==============================
-
-setInterval(()=>{
-
-const badge=document.querySelector(".badge");
-
-if(!badge) return;
-
-let count=parseInt(badge.innerText);
-
-count++;
-
-if(count>9) count=1;
-
-badge.innerText=count;
-
-},15000);
-
-// ==============================
-// Console
-// ==============================
-
-console.log("🚀 ClientFlow CRM Loaded Successfully");
-// Revenue Chart
-
-const salesCanvas=document.getElementById("salesChart");
-
-if(salesCanvas){
-
-new Chart(salesCanvas,{
-
-type:"line",
-
-data:{
-
-labels:["Jan","Feb","Mar","Apr","May","Jun"],
-
-datasets:[{
-
-label:"Revenue",
-
-data:[12,18,15,25,30,38],
-
-borderWidth:3,
-
-tension:.4,
-
-fill:true
-
-}]
-
-}
-
 });
 
 }
 
-// Customer Chart
+if (localStorage.getItem("theme") === "light") {
 
-const customerCanvas=document.getElementById("customerChart");
-
-if(customerCanvas){
-
-new Chart(customerCanvas,{
-
-type:"doughnut",
-
-data:{
-
-labels:["Active","New","Inactive"],
-
-datasets:[{
-
-data:[65,25,10]
-
-}]
+document.body.classList.add("light-mode");
 
 }
 
-});
+// Customer Elements
 
-}
-const modal=document.getElementById("customerModal");
+const addCustomerBtn = document.getElementById("addCustomerBtn");
+const customerModal = document.getElementById("customerModal");
+const saveCustomer = document.getElementById("saveCustomer");
 
-const addBtn=document.getElementById("addCustomerBtn");
+const customerName = document.getElementById("customerName");
+const customerCompany = document.getElementById("customerCompany");
+const customerRevenue = document.getElementById("customerRevenue");
 
-const saveBtn=document.getElementById("saveCustomer");
+const customerTable = document.getElementById("customerTable");
+const toast = document.getElementById("toast");
 
-const tbody=document.querySelector("tbody");
+// Customers Array
 
-addBtn.onclick=(e)=>{
+let customers =
+JSON.parse(localStorage.getItem("customers")) || [];
+
+// Modal Open
+
+if(addCustomerBtn){
+
+addCustomerBtn.onclick=(e)=>{
 
 e.preventDefault();
 
-modal.classList.add("active");
+customerModal.classList.add("active");
 
 };
 
-modal.onclick=(e)=>{
+}
 
-if(e.target===modal){
+// Close Modal
 
-modal.classList.remove("active");
+window.onclick=(e)=>{
+
+if(e.target===customerModal){
+
+customerModal.classList.remove("active");
 
 }
 
 };
 
-saveBtn.onclick=()=>{
+// Toast
 
-const name=document.getElementById("customerName").value;
+function showToast(message){
 
-const company=document.getElementById("customerCompany").value;
+toast.innerText=message;
 
-const revenue=document.getElementById("customerRevenue").value;
+toast.style.display="block";
 
-if(name===""||company==="") return;
+setTimeout(()=>{
 
-const customers=
+toast.style.display="none";
 
-JSON.parse(localStorage.getItem("customers"))||[];
+},2500);
+
+}
+
+// Save Customer
+
+if(saveCustomer){
+
+saveCustomer.onclick=()=>{
+
+const name=customerName.value.trim();
+
+const company=customerCompany.value.trim();
+
+const revenue=customerRevenue.value.trim();
+
+if(!name || !company || !revenue){
+
+showToast("Please fill all fields");
+
+return;
+
+}
 
 customers.push({
 
@@ -364,40 +121,75 @@ revenue
 });
 
 localStorage.setItem(
-
 "customers",
-
 JSON.stringify(customers)
-
 );
+
+customerName.value="";
+customerCompany.value="";
+customerRevenue.value="";
+
+customerModal.classList.remove("active");
 
 loadCustomers();
 
-modal.classList.remove("active");
+showToast("Customer Added");
 
 };
 
-function loadCustomers(){
+}
+/*=========================================
+ ClientFlow CRM v2.0
+ script.js - Part 2
+==========================================*/
 
-const customers=
+// Render Customers
 
-JSON.parse(localStorage.getItem("customers"))||[];
+function loadCustomers(list = customers){
 
-tbody.innerHTML="";
+if(!customerTable) return;
 
-customers.forEach(c=>{
+customerTable.innerHTML="";
 
-tbody.innerHTML+=`
+list.forEach((customer,index)=>{
+
+customerTable.innerHTML += `
 
 <tr>
 
-<td>${c.name}</td>
+<td>${customer.name}</td>
 
-<td>${c.company}</td>
+<td>${customer.company}</td>
 
-<td><span class="status active">Active</span></td>
+<td>
+<span class="status active">
+Active
+</span>
+</td>
 
-<td>$${c.revenue}</td>
+<td>$${customer.revenue}</td>
+
+<td>
+
+<div class="action-buttons">
+
+<button class="edit-btn"
+onclick="editCustomer(${index})">
+
+Edit
+
+</button>
+
+<button class="delete-btn"
+onclick="deleteCustomer(${index})">
+
+Delete
+
+</button>
+
+</div>
+
+</td>
 
 </tr>
 
@@ -407,4 +199,327 @@ tbody.innerHTML+=`
 
 }
 
+// Initial Load
+
 loadCustomers();
+
+// Delete Customer
+
+function deleteCustomer(index){
+
+if(!confirm("Delete this customer?")) return;
+
+customers.splice(index,1);
+
+localStorage.setItem(
+"customers",
+JSON.stringify(customers)
+);
+
+loadCustomers();
+
+showToast("Customer Deleted");
+
+}
+
+// Edit Customer
+
+function editCustomer(index){
+
+let customer = customers[index];
+
+const name = prompt(
+"Customer Name",
+customer.name
+);
+
+if(name===null) return;
+
+const company = prompt(
+"Company Name",
+customer.company
+);
+
+if(company===null) return;
+
+const revenue = prompt(
+"Revenue",
+customer.revenue
+);
+
+if(revenue===null) return;
+
+customers[index]={
+
+name,
+company,
+revenue
+
+};
+
+localStorage.setItem(
+"customers",
+JSON.stringify(customers)
+);
+
+loadCustomers();
+
+showToast("Customer Updated");
+
+}
+
+// Live Search
+
+const searchInput =
+document.getElementById("searchInput");
+
+if(searchInput){
+
+searchInput.addEventListener("input",()=>{
+
+const keyword =
+searchInput.value.toLowerCase();
+
+const filtered =
+customers.filter(customer=>
+
+customer.name.toLowerCase().includes(keyword) ||
+
+customer.company.toLowerCase().includes(keyword)
+
+);
+
+loadCustomers(filtered);
+
+});
+
+}
+
+// Export CSV
+
+const exportBtn =
+document.getElementById("exportCSV");
+
+if(exportBtn){
+
+exportBtn.onclick=()=>{
+
+let csv =
+"Name,Company,Revenue\n";
+
+customers.forEach(customer=>{
+
+csv +=
+`${customer.name},${customer.company},${customer.revenue}\n`;
+
+});
+
+const blob =
+new Blob([csv],{
+type:"text/csv"
+});
+
+const url =
+URL.createObjectURL(blob);
+
+const a =
+document.createElement("a");
+
+a.href=url;
+
+a.download="customers.csv";
+
+a.click();
+
+URL.revokeObjectURL(url);
+
+showToast("CSV Exported");
+
+};
+
+}
+/*=========================================
+ ClientFlow CRM v2.0
+ script.js - Part 3
+==========================================*/
+
+// Revenue Chart
+
+const salesChartCanvas = document.getElementById("salesChart");
+
+if(salesChartCanvas){
+
+new Chart(salesChartCanvas,{
+
+type:"line",
+
+data:{
+
+labels:[
+"Jan",
+"Feb",
+"Mar",
+"Apr",
+"May",
+"Jun",
+"Jul"
+],
+
+datasets:[{
+
+label:"Revenue",
+
+data:[
+12000,
+18000,
+15000,
+22000,
+26000,
+30000,
+35400
+],
+
+borderWidth:3,
+
+fill:false,
+
+tension:0.4
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+maintainAspectRatio:false,
+
+plugins:{
+
+legend:{
+
+display:true
+
+}
+
+}
+
+}
+
+});
+
+}
+
+// Customer Chart
+
+const customerChartCanvas =
+document.getElementById("customerChart");
+
+if(customerChartCanvas){
+
+new Chart(customerChartCanvas,{
+
+type:"doughnut",
+
+data:{
+
+labels:[
+"Active",
+"Pending",
+"Inactive"
+],
+
+datasets:[{
+
+data:[
+65,
+20,
+15
+]
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+maintainAspectRatio:false
+
+}
+
+});
+
+}
+
+// Dashboard Count
+
+function updateDashboard(){
+
+const totalCustomers = customers.length;
+
+const customerCard =
+document.querySelectorAll(".stat-card h2");
+
+if(customerCard.length>1){
+
+customerCard[1].textContent =
+totalCustomers;
+
+}
+
+}
+
+updateDashboard();
+
+// Refresh Dashboard
+
+const oldLoad = loadCustomers;
+
+loadCustomers = function(list = customers){
+
+oldLoad(list);
+
+updateDashboard();
+
+};
+
+// Keyboard Shortcut
+
+document.addEventListener("keydown",(e)=>{
+
+if(e.ctrlKey && e.key==="n"){
+
+e.preventDefault();
+
+customerModal.classList.add("active");
+
+}
+
+});
+
+// ESC Close Modal
+
+document.addEventListener("keydown",(e)=>{
+
+if(e.key==="Escape"){
+
+customerModal.classList.remove("active");
+
+}
+
+});
+
+// Welcome Toast
+
+window.addEventListener("load",()=>{
+
+setTimeout(()=>{
+
+showToast("Welcome to ClientFlow CRM");
+
+},700);
+
+});
