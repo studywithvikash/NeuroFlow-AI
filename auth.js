@@ -1,178 +1,211 @@
 /*=========================================
- ClientFlow CRM v3.0
+ ClientFlow CRM v3.1
  auth.js - Part 1
-==========================================*/
+=========================================*/
 
-// Toggle Password (Login)
+// ===== Password Toggle =====
 
-const togglePassword = document.getElementById("togglePassword");
-const loginPassword = document.getElementById("loginPassword");
+function togglePassword(inputId, buttonId) {
 
-if(togglePassword && loginPassword){
+const input = document.getElementById(inputId);
+const button = document.getElementById(buttonId);
 
-togglePassword.addEventListener("click",()=>{
+if (!input || !button) return;
 
-const type =
-loginPassword.getAttribute("type")==="password"
-? "text"
-: "password";
+button.addEventListener("click", () => {
 
-loginPassword.setAttribute("type",type);
+if (input.type === "password") {
 
-togglePassword.innerHTML=
-type==="password"
-? '<i class="fa-solid fa-eye"></i>'
-: '<i class="fa-solid fa-eye-slash"></i>';
+input.type = "text";
+button.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+
+} else {
+
+input.type = "password";
+button.innerHTML = '<i class="fa-solid fa-eye"></i>';
+
+}
 
 });
 
 }
 
-// Toggle Password (Signup)
+togglePassword("loginPassword", "togglePassword");
+togglePassword("signupPassword", "toggleSignupPassword");
 
-const toggleSignupPassword =
-document.getElementById("toggleSignupPassword");
 
-const signupPassword =
-document.getElementById("signupPassword");
+// ===== Signup =====
 
-if(toggleSignupPassword && signupPassword){
+const signupForm = document.getElementById("signupForm");
 
-toggleSignupPassword.addEventListener("click",()=>{
+if (signupForm) {
 
-const type =
-signupPassword.getAttribute("type")==="password"
-? "text"
-: "password";
-
-signupPassword.setAttribute("type",type);
-
-toggleSignupPassword.innerHTML=
-type==="password"
-? '<i class="fa-solid fa-eye"></i>'
-: '<i class="fa-solid fa-eye-slash"></i>';
-
-});
-
-}
-
-// Signup
-
-const signupForm =
-document.getElementById("signupForm");
-
-if(signupForm){
-
-signupForm.addEventListener("submit",(e)=>{
+signupForm.addEventListener("submit", function (e) {
 
 e.preventDefault();
 
-const name =
-document.getElementById("signupName").value.trim();
+const name = document.getElementById("signupName").value.trim();
+const email = document.getElementById("signupEmail").value.trim().toLowerCase();
+const password = document.getElementById("signupPassword").value;
+const confirm = document.getElementById("confirmPassword").value;
 
-const email =
-document.getElementById("signupEmail").value.trim();
+if (password !== confirm) {
 
-const password =
-document.getElementById("signupPassword").value;
+alert("Passwords do not match.");
+return;
 
-const confirm =
-document.getElementById("confirmPassword").value;
+}
 
-if(password!==confirm){
+let users = JSON.parse(localStorage.getItem("crmUsers")) || [];
 
-alert("Passwords do not match!");
+// Check Existing Email
+
+const exists = users.find(user => user.email === email);
+
+if (exists) {
+
+alert("Email already registered.");
 
 return;
 
 }
 
-const user={
+// Save User
+
+users.push({
 
 name,
 email,
 password
 
-};
+});
 
-localStorage.setItem(
-"crmUser",
-JSON.stringify(user)
-);
+localStorage.setItem("crmUsers", JSON.stringify(users));
 
 alert("Account created successfully!");
 
-window.location.href="login.html";
+window.location.href = "login.html";
 
 });
 
 }
 /*=========================================
- ClientFlow CRM v3.0
+ ClientFlow CRM v3.1
  auth.js - Part 2
-==========================================*/
+=========================================*/
 
-// Login
+// ===== Login =====
 
-const loginForm =
-document.getElementById("loginForm");
+const loginForm = document.getElementById("loginForm");
 
-if(loginForm){
+if (loginForm) {
 
-loginForm.addEventListener("submit",(e)=>{
+loginForm.addEventListener("submit", function(e){
 
 e.preventDefault();
 
 const email =
-document.getElementById("loginEmail").value.trim();
+document.getElementById("loginEmail")
+.value.trim().toLowerCase();
 
 const password =
-document.getElementById("loginPassword").value;
+document.getElementById("loginPassword")
+.value;
 
-const savedUser =
-JSON.parse(localStorage.getItem("crmUser"));
+const remember =
+document.getElementById("rememberMe").checked;
 
-if(!savedUser){
+const users =
+JSON.parse(localStorage.getItem("crmUsers")) || [];
 
-alert("No account found. Please sign up first.");
+// Find User
 
-window.location.href="signup.html";
+const user = users.find(u=>
+
+u.email===email &&
+u.password===password
+
+);
+
+if(!user){
+
+alert("Invalid Email or Password");
 
 return;
 
 }
 
-if(
-email===savedUser.email &&
-password===savedUser.password
-){
+// Login Success
 
-localStorage.setItem("crmLoggedIn","true");
+localStorage.setItem(
+"crmLoggedIn",
+"true"
+);
+
+localStorage.setItem(
+"currentUser",
+JSON.stringify(user)
+);
+
+localStorage.setItem(
+"lastActivity",
+Date.now()
+);
+
+if(remember){
+
+localStorage.setItem(
+"rememberUser",
+email
+);
+
+}else{
+
+localStorage.removeItem(
+"rememberUser"
+);
+
+}
 
 alert("Login Successful!");
 
 window.location.href="index.html";
 
-}else{
-
-alert("Invalid email or password.");
-
-}
-
 });
 
 }
 
-// Session Check
+// ===== Remember Me =====
+
+const rememberedEmail =
+localStorage.getItem("rememberUser");
 
 if(
-window.location.pathname.includes("index.html")
+rememberedEmail &&
+document.getElementById("loginEmail")
 ){
 
-const loggedIn =
-localStorage.getItem("crmLoggedIn");
+document.getElementById("loginEmail")
+.value = rememberedEmail;
 
-if(loggedIn!=="true"){
+document.getElementById("rememberMe")
+.checked = true;
+
+}
+
+// ===== Dashboard Protection =====
+
+const page =
+window.location.pathname
+.split("/")
+.pop();
+
+if(page==="index.html" || page===""){
+
+if(
+localStorage.getItem("crmLoggedIn")
+!=="true"
+){
 
 window.location.href="login.html";
 
@@ -180,72 +213,133 @@ window.location.href="login.html";
 
 }
 
-// Logout
+// ===== Current User =====
+
+const currentUser =
+JSON.parse(
+localStorage.getItem("currentUser")
+);
+
+if(currentUser){
+
+const profileName =
+document.getElementById("profileName");
+
+if(profileName){
+
+profileName.textContent =
+currentUser.name;
+
+}
+
+ /*=========================================
+ ClientFlow CRM v3.1
+ auth.js - Part 3
+=========================================*/
+
+// ===== Logout =====
 
 function logout(){
 
 localStorage.removeItem("crmLoggedIn");
+localStorage.removeItem("currentUser");
+
+alert("Logged out successfully!");
 
 window.location.href="login.html";
 
 }
-/*=========================================
- ClientFlow CRM v3.0
- auth.js - Part 3
-==========================================*/
 
-// Remember Me
+// Logout Button
 
-const rememberCheckbox =
-document.querySelector(".options input[type='checkbox']");
+const logoutBtn =
+document.getElementById("logoutBtn");
 
-if(rememberCheckbox){
+if(logoutBtn){
 
-rememberCheckbox.checked =
-localStorage.getItem("crmRemember")==="true";
-
-rememberCheckbox.addEventListener("change",()=>{
-
-localStorage.setItem(
-"crmRemember",
-rememberCheckbox.checked
-);
-
-});
+logoutBtn.addEventListener("click",logout);
 
 }
 
-// Loading Button
+// ===== Session Timeout =====
 
-document.querySelectorAll(".login-btn").forEach(button=>{
+const SESSION_TIME = 30 * 60 * 1000; // 30 Minutes
 
-button.addEventListener("click",()=>{
+function updateActivity(){
 
-button.classList.add("loading");
+if(localStorage.getItem("crmLoggedIn")==="true"){
 
-setTimeout(()=>{
+localStorage.setItem(
+"lastActivity",
+Date.now()
+);
 
-button.classList.remove("loading");
+}
 
-},1000);
+}
+
+function checkSession(){
+
+if(localStorage.getItem("crmLoggedIn")!=="true"){
+
+return;
+
+}
+
+const last =
+Number(localStorage.getItem("lastActivity")) || 0;
+
+if(Date.now()-last > SESSION_TIME){
+
+alert("Session expired. Please login again.");
+
+logout();
+
+}
+
+}
+
+// Track Activity
+
+["click","keydown","mousemove","scroll","touchstart"]
+.forEach(event=>{
+
+document.addEventListener(event,updateActivity);
 
 });
 
+// Check Every Minute
+
+setInterval(checkSession,60000);
+
+// ===== Welcome =====
+
+window.addEventListener("load",()=>{
+
+const user =
+JSON.parse(localStorage.getItem("currentUser"));
+
+if(user){
+
+console.log("Welcome " + user.name);
+
+}
+
 });
 
-// Enter Key Support
+// ===== Enter Key Support =====
 
-document.addEventListener("keydown",(e)=>{
+document.querySelectorAll("input").forEach(input=>{
+
+input.addEventListener("keydown",(e)=>{
 
 if(e.key==="Enter"){
 
-const active=document.activeElement;
-
-if(active && active.tagName==="INPUT"){
-
-const form=active.closest("form");
+const form=input.closest("form");
 
 if(form){
+
+e.preventDefault();
 
 form.requestSubmit();
 
@@ -253,24 +347,22 @@ form.requestSubmit();
 
 }
 
-}
+});
 
 });
 
-// Welcome User
+// ===== Auto Focus =====
 
-const savedUser =
-JSON.parse(localStorage.getItem("crmUser"));
+const firstInput =
+document.querySelector("input");
 
-if(savedUser){
+if(firstInput){
 
-console.log(
-`Welcome ${savedUser.name}`
-);
+firstInput.focus();
 
 }
 
-// Auto Reset Forms
+// ===== Auto Form Reset =====
 
 window.addEventListener("pageshow",()=>{
 
@@ -281,67 +373,4 @@ form.reset();
 });
 
 });
-
-// Logout Button Support
-
-const logoutBtn =
-document.getElementById("logoutBtn");
-
-if(logoutBtn){
-
-logoutBtn.addEventListener("click",()=>{
-
-localStorage.removeItem("crmLoggedIn");
-
-window.location.href="login.html";
-
-});
-
 }
-
-// Session Timeout (30 Minutes)
-
-const SESSION_TIME = 30 * 60 * 1000;
-
-if(localStorage.getItem("crmLoggedIn")==="true"){
-
-const lastActivity =
-Number(localStorage.getItem("lastActivity")) || Date.now();
-
-if(Date.now()-lastActivity > SESSION_TIME){
-
-localStorage.removeItem("crmLoggedIn");
-
-alert("Session expired. Please login again.");
-
-window.location.href="login.html";
-
-}else{
-
-localStorage.setItem(
-"lastActivity",
-Date.now()
-);
-
-}
-
-}
-
-// Update Activity
-
-["click","keydown","mousemove"].forEach(event=>{
-
-document.addEventListener(event,()=>{
-
-if(localStorage.getItem("crmLoggedIn")==="true"){
-
-localStorage.setItem(
-"lastActivity",
-Date.now()
-);
-
-}
-
-});
-
-});
