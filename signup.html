@@ -1,250 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
+// ===========================
+// FIREBASE SIGNUP
+// ===========================
 
-<head>
+const signupForm = document.getElementById("signupForm");
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+if (signupForm) {
 
-<title>ClientFlow CRM | Sign Up</title>
+signupForm.addEventListener("submit", async (e) => {
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+e.preventDefault();
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+const name =
+document.getElementById("signupName").value.trim();
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+const email =
+document.getElementById("signupEmail").value.trim();
 
-<link rel="stylesheet" href="auth.css">
+const password =
+document.getElementById("signupPassword").value;
 
-</head>
+const confirm =
+document.getElementById("confirmPassword").value;
 
-<body>
+if(password !== confirm){
 
-<div class="auth-container">
+alert("Passwords do not match");
 
-    <!-- Left Side -->
+return;
 
-    <div class="auth-card">
+}
 
-        <div class="logo">
+try{
 
-            <i class="fa-solid fa-chart-line"></i>
+const userCredential =
+await createUserWithEmailAndPassword(
+auth,
+email,
+password
+);
 
-            <h1>ClientFlow CRM</h1>
+const user = userCredential.user;
 
-            <p>Create Your Account 🚀</p>
+await setDoc(doc(db,"users",user.uid),{
 
-        </div>
+name:name,
 
-        <form id="signupForm">
+email:email,
 
-            <div class="input-group">
+createdAt:new Date().toISOString()
 
-                <label>Full Name</label>
+});
 
-                <div class="input-box">
+alert("Account Created Successfully!");
 
-                    <i class="fa-solid fa-user"></i>
+window.location.href="login.html";
 
-                    <input
-                    type="text"
-                    id="signupName"
-                    placeholder="Enter your full name"
-                    required>
+}
 
-                </div>
+catch(error){
 
-            </div>
+alert(error.message);
 
-            <div class="input-group">
+}
 
-                <label>Email Address</label>
+});
 
-                <div class="input-box">
-
-                    <i class="fa-solid fa-envelope"></i>
-
-                    <input
-                    type="email"
-                    id="signupEmail"
-                    placeholder="Enter your email"
-                    required>
-
-                </div>
-
-            </div>
-
-            <div class="input-group">
-
-                <label>Password</label>
-
-                <div class="input-box">
-
-                    <i class="fa-solid fa-lock"></i>
-
-                    <input
-                    type="password"
-                    id="signupPassword"
-                    placeholder="Create Password"
-                    required>
-
-                    <button
-                    type="button"
-                    class="eye-btn"
-                    id="toggleSignupPassword">
-
-                        <i class="fa-solid fa-eye"></i>
-
-                    </button>
-
-                </div>
-
-            </div>
-
-            <div class="input-group">
-
-                <label>Confirm Password</label>
-
-                <div class="input-box">
-
-                    <i class="fa-solid fa-lock"></i>
-
-                    <input
-                    type="password"
-                    id="confirmPassword"
-                    placeholder="Confirm Password"
-                    required>
-
-                </div>
-
-            </div>
-
-            <label class="terms">
-
-                <input
-                type="checkbox"
-                id="agreeTerms"
-                required>
-
-                I agree to the Terms & Conditions
-
-            </label>
-
-            <button
-            type="submit"
-            class="login-btn"
-            id="signupBtn">
-
-                <i class="fa-solid fa-user-plus"></i>
-
-                Create Account
-
-            </button>
-
-            <p class="auth-link">
-
-                Already have an account?
-
-                <a href="login.html">
-
-                    Login Here
-
-                </a>
-
-            </p>
-
-        </form>
-
-    </div>
-
-    <!-- Right Side -->
-
-    <div class="auth-side">
-
-        <div class="overlay">
-
-            <h2>Build Better Customer Relationships</h2>
-
-            <p>
-
-                Join ClientFlow CRM and manage customers,
-                sales, invoices, leads and reports from one
-                beautiful dashboard.
-
-            </p>
-
-            <div class="feature-list">
-
-                <div class="feature-item">
-
-                    <i class="fa-solid fa-users"></i>
-
-                    <span>Unlimited Customers</span>
-
-                </div>
-
-                <div class="feature-item">
-
-                    <i class="fa-solid fa-chart-column"></i>
-
-                    <span>Business Analytics</span>
-
-                </div>
-
-                <div class="feature-item">
-
-                    <i class="fa-solid fa-file-invoice-dollar"></i>
-
-                    <span>Invoice Management</span>
-
-                </div>
-
-                <div class="feature-item">
-
-                    <i class="fa-solid fa-cloud"></i>
-
-                    <span>Cloud Ready</span>
-
-                </div>
-
-            </div>
-
-            <div class="security-badges">
-
-                <span>
-
-                    <i class="fa-solid fa-lock"></i>
-
-                    Secure
-
-                </span>
-
-                <span>
-
-                    <i class="fa-solid fa-shield-halved"></i>
-
-                    Protected
-
-                </span>
-
-                <span>
-
-                    <i class="fa-solid fa-bolt"></i>
-
-                    Fast
-
-                </span>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<script type="module" src="auth.js"></script>
-
-</body>
-</html>
+}
