@@ -923,3 +923,17 @@ animation:fadeUp .7s ease both;
 .badge{
 animation:pulse 2s infinite;
 }
+#logoutBtn{
+padding:8px 16px;
+margin-left:15px;
+border:none;
+border-radius:8px;
+background:#ef4444;
+color:#fff;
+cursor:pointer;
+font-size:14px;
+}
+
+#logoutBtn:hover{
+background:#dc2626;
+}
