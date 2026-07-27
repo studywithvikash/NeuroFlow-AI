@@ -6,9 +6,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ClientFlow CRM Dashboard</title>
+<title>ClientFlow CRM v2.0</title>
 
-<meta name="description" content="Modern CRM Dashboard Template for managing customers, sales and business analytics.">
+<meta name="description" content="Modern CRM Dashboard for Sales, Customers & Business Analytics">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 <link rel="stylesheet" href="style.css">
 
@@ -29,11 +29,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
 <aside class="sidebar">
 
 <div class="logo">
-
 <i class="fa-solid fa-chart-line"></i>
-
 <span>ClientFlow</span>
-
 </div>
 
 <ul class="sidebar-menu">
@@ -41,49 +38,49 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
 <li class="active">
 <a href="#">
 <i class="fa-solid fa-house"></i>
-Dashboard
+<span>Dashboard</span>
 </a>
 </li>
 
 <li>
 <a href="#">
 <i class="fa-solid fa-users"></i>
-Customers
+<span>Customers</span>
 </a>
 </li>
 
 <li>
 <a href="#">
 <i class="fa-solid fa-user-plus"></i>
-Leads
+<span>Leads</span>
 </a>
 </li>
 
 <li>
 <a href="#">
 <i class="fa-solid fa-chart-column"></i>
-Sales
+<span>Analytics</span>
 </a>
 </li>
 
 <li>
 <a href="#">
 <i class="fa-solid fa-file-lines"></i>
-Reports
+<span>Reports</span>
 </a>
 </li>
 
 <li>
 <a href="#">
 <i class="fa-solid fa-calendar-days"></i>
-Calendar
+<span>Calendar</span>
 </a>
 </li>
 
 <li>
 <a href="#">
 <i class="fa-solid fa-gear"></i>
-Settings
+<span>Settings</span>
 </a>
 </li>
 
@@ -91,11 +88,11 @@ Settings
 
 </aside>
 
-<!-- Main -->
+<!-- Main Content -->
 
 <div class="main-content">
 
-<!-- Top Navbar -->
+<!-- Top Navigation -->
 
 <header class="topbar">
 
@@ -103,8 +100,10 @@ Settings
 
 <i class="fa-solid fa-magnifying-glass"></i>
 
-<input type="text"
-placeholder="Search customers, reports...">
+<input
+type="text"
+id="searchInput"
+placeholder="Search customers...">
 
 </div>
 
@@ -120,13 +119,14 @@ placeholder="Search customers, reports...">
 
 <i class="fa-solid fa-bell"></i>
 
-<span class="badge">5</span>
+<span class="badge">3</span>
 
 </div>
 
 <div class="profile">
 
-<img src="https://i.pravatar.cc/60?img=12"
+<img
+src="https://i.pravatar.cc/80?img=12"
 alt="Profile">
 
 <div>
@@ -143,7 +143,7 @@ alt="Profile">
 
 </header>
 
-<!-- Dashboard Heading -->
+<!-- Dashboard Header -->
 
 <section class="dashboard-header">
 
@@ -151,559 +151,453 @@ alt="Profile">
 
 <h1>Dashboard Overview</h1>
 
-<p>Welcome back! Here's your business performance today.</p>
+<p>Welcome back! Here's today's business summary.</p>
 
 </div>
 
 <a href="#" class="btn-primary" id="addCustomerBtn">
-    <i class="fa-solid fa-plus"></i>
-    Add Customer
+
+<i class="fa-solid fa-plus"></i>
+
+Add Customer
+
 </a>
+
+</section>
+
+<!-- Statistics Cards -->
+
+<section class="stats-grid">
 
 <div class="stat-card">
 
 <div class="icon blue">
-
 <i class="fa-solid fa-dollar-sign"></i>
-
 </div>
 
 <h2>$58,420</h2>
 
 <p>Total Revenue</p>
 
-<span class="positive">
-
-+18.5% this month
-
-</span>
+<span class="positive">+18.5%</span>
 
 </div>
 
 <div class="stat-card">
 
 <div class="icon green">
-
 <i class="fa-solid fa-users"></i>
-
 </div>
 
 <h2>1,245</h2>
 
 <p>Customers</p>
 
-<span class="positive">
-
-+8.2% this month
-
-</span>
+<span class="positive">+8.2%</span>
 
 </div>
 
 <div class="stat-card">
 
 <div class="icon orange">
-
 <i class="fa-solid fa-user-plus"></i>
-
 </div>
 
 <h2>342</h2>
 
 <p>New Leads</p>
 
-<span class="positive">
-
-+12.4% this week
-
-</span>
+<span class="positive">+12.4%</span>
 
 </div>
 
 <div class="stat-card">
 
 <div class="icon red">
-
 <i class="fa-solid fa-chart-line"></i>
-
 </div>
 
 <h2>74%</h2>
 
 <p>Conversion Rate</p>
 
-<span class="positive">
-
-+4.8% improvement
-
-</span>
+<span class="positive">+4.8%</span>
 
 </div>
 
 </section>
-
-<!-- Part 2 Starts Here -->
-
-<script src="script.js"></script>
-
-
-<!-- =========================
-     SALES ANALYTICS
-========================= -->
+<!-- =====================================
+     Dashboard Analytics
+====================================== -->
 
 <section class="dashboard-grid">
 
-<!-- Sales Chart -->
+    <!-- Revenue Analytics -->
 
-<div class="chart-card">
+    <div class="chart-card">
 
-<div class="card-header">
+        <div class="card-header">
 
-<h3>Sales Analytics</h3>
+            <h3>Revenue Analytics</h3>
 
-<select>
+            <select id="chartFilter">
 
-<option>Last 7 Days</option>
-<option selected>Last 30 Days</option>
-<option>Last 90 Days</option>
+                <option>This Week</option>
+                <option selected>This Month</option>
+                <option>This Year</option>
 
-</select>
+            </select>
 
-</div>
+        </div>
 
-<div class="chart-card">
+        <canvas id="salesChart"></canvas>
 
-    <div class="card-header">
-        <h3>Revenue Analytics</h3>
     </div>
 
-    <canvas id="salesChart"></canvas>
+    <!-- Customer Distribution -->
 
-</div>
+    <div class="chart-card">
 
-</div>
-<!-- Sales Pipeline -->
+        <div class="card-header">
 
-<div class="pipeline-card">
-<div class="card-header">
-<h3>Sales Pipeline</h3>
-</
+            <h3>Customer Distribution</h3>
 
-<div class="pipeline-item">
+        </div>
 
-<div>
+        <canvas id="customerChart"></canvas>
 
-<h4>Qualified Leads</h4>
-
-<p>125 Leads</p>
-
-</div>
-
-<strong>82%</strong>
-
-</div>
-
-<div class="pipeline-item">
-
-<div>
-
-<h4>Proposal Sent</h4>
-
-<p>72 Deals</p>
-
-</div>
-
-<strong>61%</strong>
-
-</div>
-
-<div class="pipeline-item">
-
-<div>
-
-<h4>Negotiation</h4>
-
-<p>31 Deals</p>
-
-</div>
-
-<strong>38%</strong>
-
-</div>
-
-<div class="pipeline-item">
-
-<div>
-
-<h4>Closed Won</h4>
-
-<p>18 Deals</p>
-
-</div>
-
-<strong>21%</strong>
-
-</div>
-
-</div>
+    </div>
 
 </section>
 
-<!-- =========================
-     RECENT CUSTOMERS
-========================= -->
+<!-- =====================================
+     Sales Pipeline
+====================================== -->
+
+<section class="pipeline-card">
+
+    <div class="card-header">
+
+        <h3>Sales Pipeline</h3>
+
+        <a href="#">View Report</a>
+
+    </div>
+
+    <div class="pipeline-item">
+
+        <div>
+
+            <h4>Qualified Leads</h4>
+
+            <p>125 Leads</p>
+
+        </div>
+
+        <strong>82%</strong>
+
+    </div>
+
+    <div class="pipeline-item">
+
+        <div>
+
+            <h4>Proposal Sent</h4>
+
+            <p>72 Deals</p>
+
+        </div>
+
+        <strong>61%</strong>
+
+    </div>
+
+    <div class="pipeline-item">
+
+        <div>
+
+            <h4>Negotiation</h4>
+
+            <p>31 Deals</p>
+
+        </div>
+
+        <strong>38%</strong>
+
+    </div>
+
+    <div class="pipeline-item">
+
+        <div>
+
+            <h4>Closed Won</h4>
+
+            <p>18 Deals</p>
+
+        </div>
+
+        <strong>21%</strong>
+
+    </div>
+
+</section>
+
+<!-- =====================================
+     Recent Customers
+====================================== -->
 
 <section class="table-card">
 
-<div class="card-header">
+    <div class="card-header">
 
-<h3>Recent Customers</h3>
+        <h3>Recent Customers</h3>
 
-<a href="#">View All</a>
+        <button class="export-btn" id="exportCSV">
 
-</div>
+            <i class="fa-solid fa-download"></i>
 
-<table>
+            Export CSV
 
-<thead>
+        </button>
 
-<tr>
+    </div>
 
-<th>Name</th>
+    <table>
 
-<th>Company</th>
+        <thead>
 
-<th>Status</th>
+            <tr>
 
-<th>Revenue</th>
+                <th>Name</th>
 
-</tr>
+                <th>Company</th>
 
-</thead>
+                <th>Status</th>
 
-<tbody>
+                <th>Revenue</th>
 
-<tr>
+                <th>Action</th>
 
-<td>Sarah Johnson</td>
+            </tr>
 
-<td>Pixel Studio</td>
+        </thead>
 
-<td><span class="status active">Active</span></td>
+        <tbody id="customerTable">
 
-<td>$3,450</td>
+        </tbody>
 
-</tr>
-
-<tr>
-
-<td>Michael Brown</td>
-
-<td>Nova Tech</td>
-
-<td><span class="status pending">Pending</span></td>
-
-<td>$1,980</td>
-
-</tr>
-
-<tr>
-
-<td>Emily Davis</td>
-
-<td>Bright Agency</td>
-
-<td><span class="status active">Active</span></td>
-
-<td>$6,220</td>
-
-</tr>
-
-<tr>
-
-<td>David Wilson</td>
-
-<td>Vision Labs</td>
-
-<td><span class="status inactive">Inactive</span></td>
-
-<td>$740</td>
-
-</tr>
-
-</tbody>
-
-</table>
+    </table>
 
 </section>
 
-<!-- =========================
-     ACTIVITY TIMELINE
-========================= -->
+<!-- =====================================
+     Recent Activity
+====================================== -->
 
 <section class="activity-card">
 
-<div class="card-header">
+    <div class="card-header">
 
-<h3>Recent Activity</h3>
+        <h3>Recent Activity</h3>
 
-</div>
+    </div>
 
-<div class="activity-item">
+    <div class="activity-item">
 
-<div class="activity-icon">
+        <div class="activity-icon">
 
-<i class="fa-solid fa-user-plus"></i>
+            <i class="fa-solid fa-user-plus"></i>
 
-</div>
+        </div>
 
-<div>
+        <div>
 
-<h4>New customer registered</h4>
+            <h4>New customer registered</h4>
 
-<p>2 minutes ago</p>
+            <p>2 minutes ago</p>
 
-</div>
+        </div>
 
-</div>
+    </div>
 
-<div class="activity-item">
+    <div class="activity-item">
 
-<div class="activity-icon">
+        <div class="activity-icon">
 
-<i class="fa-solid fa-dollar-sign"></i>
+            <i class="fa-solid fa-dollar-sign"></i>
 
-</div>
+        </div>
 
-<div>
+        <div>
 
-<h4>Payment received</h4>
+            <h4>Payment received</h4>
 
-<p>15 minutes ago</p>
+            <p>15 minutes ago</p>
 
-</div>
+        </div>
 
-</div>
+    </div>
 
-<div class="activity-item">
+    <div class="activity-item">
 
-<div class="activity-icon">
+        <div class="activity-icon">
 
-<i class="fa-solid fa-envelope"></i>
+            <i class="fa-solid fa-envelope"></i>
 
-</div>
+        </div>
 
-<div>
+        <div>
 
-<h4>Proposal sent to client</h4>
+            <h4>Proposal sent to client</h4>
 
-<p>1 hour ago</p>
+            <p>1 hour ago</p>
 
-</div>
+        </div>
 
-</div>
-
-<div class="activity-item">
-
-<div class="activity-icon">
-
-<i class="fa-solid fa-circle-check"></i>
-
-</div>
-
-<div>
-
-<h4>Deal successfully closed</h4>
-
-<p>Today</p>
-
-</div>
-
-</div>
+    </div>
 
 </section>
-
-<!-- ===== Part 2 Complete ===== -->
-<!-- =========================
-     TEAM PERFORMANCE
-========================= -->
+<!-- =====================================
+     Activity + Notifications + Footer
+====================================== -->
 
 <section class="bottom-grid">
 
-<div class="team-card">
+    <!-- Activity -->
 
-<div class="card-header">
-<h3>Team Performance</h3>
-<a href="#">View Team</a>
-</div>
+    <div class="activity-card">
 
-<div class="team-member">
-<div class="member-info">
-<img src="https://i.pravatar.cc/60?img=15" alt="">
-<div>
-<h4>Sarah Johnson</h4>
-<p>Sales Manager</p>
-</div>
-</div>
-<strong>96%</strong>
-</div>
+        <div class="card-header">
+            <h3>Recent Activity</h3>
+        </div>
 
-<div class="team-member">
-<div class="member-info">
-<img src="https://i.pravatar.cc/60?img=18" alt="">
-<div>
-<h4>Michael Brown</h4>
-<p>Marketing Lead</p>
-</div>
-</div>
-<strong>91%</strong>
-</div>
+        <div class="activity-item">
+            <div class="activity-icon">
+                <i class="fa-solid fa-user-plus"></i>
+            </div>
 
-<div class="team-member">
-<div class="member-info">
-<img src="https://i.pravatar.cc/60?img=21" alt="">
-<div>
-<h4>Emily Davis</h4>
-<p>Support Head</p>
-</div>
-</div>
-<strong>89%</strong>
-</div>
+            <div>
+                <h4>New Customer Added</h4>
+                <p>2 minutes ago</p>
+            </div>
+        </div>
 
-</div>
+        <div class="activity-item">
+            <div class="activity-icon">
+                <i class="fa-solid fa-dollar-sign"></i>
+            </div>
 
-<!-- =========================
-     CALENDAR
-========================= -->
+            <div>
+                <h4>Invoice Paid</h4>
+                <p>15 minutes ago</p>
+            </div>
+        </div>
 
-<div class="calendar-card">
+        <div class="activity-item">
+            <div class="activity-icon">
+                <i class="fa-solid fa-envelope"></i>
+            </div>
 
-<div class="card-header">
-<h3>Upcoming Meetings</h3>
-</div>
+            <div>
+                <h4>Proposal Sent</h4>
+                <p>1 hour ago</p>
+            </div>
+        </div>
 
-<div class="meeting">
-<h4>Sales Review</h4>
-<p>Monday • 10:00 AM</p>
-</div>
+    </div>
 
-<div class="meeting">
-<h4>Client Demo</h4>
-<p>Tuesday • 2:30 PM</p>
-</div>
+    <!-- Notifications -->
 
-<div class="meeting">
-<h4>Marketing Planning</h4>
-<p>Wednesday • 11:00 AM</p>
-</div>
+    <div class="notification-card">
 
-<div class="meeting">
-<h4>Product Launch</h4>
-<p>Friday • 4:00 PM</p>
-</div>
+        <div class="card-header">
+            <h3>Notifications</h3>
+        </div>
 
-</div>
+        <div class="notify-item">
+            <i class="fa-solid fa-bell"></i>
+            <p>You have 5 unread notifications.</p>
+        </div>
+
+        <div class="notify-item">
+            <i class="fa-solid fa-chart-line"></i>
+            <p>Revenue increased by 18% this month.</p>
+        </div>
+
+        <div class="notify-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <p>Backup completed successfully.</p>
+        </div>
+
+    </div>
 
 </section>
 
-<!-- =========================
-     NOTIFICATIONS
-========================= -->
+<!-- =====================================
+     Add Customer Modal
+====================================== -->
 
-<section class="notification-card">
+<div class="modal" id="customerModal">
 
-<div class="card-header">
-<h3>Notifications</h3>
+    <div class="modal-content">
+
+        <h2>Add Customer</h2>
+
+        <input
+            type="text"
+            id="customerName"
+            placeholder="Customer Name">
+
+        <input
+            type="text"
+            id="customerCompany"
+            placeholder="Company">
+
+        <input
+            type="number"
+            id="customerRevenue"
+            placeholder="Revenue">
+
+        <button id="saveCustomer">
+            Save Customer
+        </button>
+
+    </div>
+
 </div>
 
-<div class="notify-item">
-<i class="fa-solid fa-circle-check"></i>
-<p>Invoice #2045 paid successfully.</p>
+<!-- =====================================
+     Toast Notification
+====================================== -->
+
+<div class="toast" id="toast">
+    Customer Saved Successfully
 </div>
 
-<div class="notify-item">
-<i class="fa-solid fa-user-plus"></i>
-<p>New customer joined today.</p>
-</div>
-
-<div class="notify-item">
-<i class="fa-solid fa-chart-line"></i>
-<p>Monthly revenue increased by 18%.</p>
-</div>
-
-<div class="notify-item">
-<i class="fa-solid fa-envelope"></i>
-<p>You received 12 new messages.</p>
-</div>
-
-</section>
-
-<!-- =========================
-     QUICK ACTIONS
-========================= -->
-
-<section class="quick-actions">
-
-<a href="#" class="action-btn">
-<i class="fa-solid fa-user-plus"></i>
-<span>Add Customer</span>
-</a>
-
-<a href="#" class="action-btn">
-<i class="fa-solid fa-file-invoice"></i>
-<span>Create Invoice</span>
-</a>
-
-<a href="#" class="action-btn">
-<i class="fa-solid fa-chart-column"></i>
-<span>View Reports</span>
-</a>
-
-<a href="#" class="action-btn">
-<i class="fa-solid fa-gear"></i>
-<span>Settings</span>
-</a>
-
-</section>
-
-<!-- =========================
-     FOOTER
-========================= -->
+<!-- =====================================
+     Footer
+====================================== -->
 
 <footer class="dashboard-footer">
 
-<p>
-© 2026 ClientFlow CRM Dashboard. All Rights Reserved.
-</p>
+    <p>
+        © 2026 ClientFlow CRM v2.0
+    </p>
 
-<p>
-Built with HTML, CSS & JavaScript
-</p>
+    <p>
+        Designed with HTML, CSS & JavaScript
+    </p>
 
 </footer>
 
 </div>
 <!-- End Main Content -->
 
-<script src="script.js"></script>
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Main JS -->
 <script src="script.js"></script>
-<div class="modal" id="customerModal">
 
-<div class="modal-content">
-
-<h2>Add Customer</h2>
-
-<input type="text" id="customerName" placeholder="Customer Name">
-
-<input type="text" id="customerCompany" placeholder="Company">
-
-<input type="number" id="customerRevenue" placeholder="Revenue">
-
-<button id="saveCustomer">Save Customer</button>
-
-</div>
-
-</div>
 </body>
 </html>
