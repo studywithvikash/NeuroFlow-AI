@@ -1,6 +1,6 @@
-// ===========================
+// ===============================
 // FIREBASE SIGNUP
-// ===========================
+// ===============================
 
 const signupForm = document.getElementById("signupForm");
 
@@ -10,30 +10,33 @@ signupForm.addEventListener("submit", async (e) => {
 
 e.preventDefault();
 
-const name =
-document.getElementById("signupName").value.trim();
+const name = document.getElementById("signupName").value.trim();
 
-const email =
-document.getElementById("signupEmail").value.trim();
+const email = document.getElementById("signupEmail").value.trim();
 
-const password =
-document.getElementById("signupPassword").value;
+const password = document.getElementById("signupPassword").value;
 
-const confirm =
-document.getElementById("confirmPassword").value;
+const confirmPassword = document.getElementById("confirmPassword").value;
 
-if(password !== confirm){
+if (name === "" || email === "" || password === "") {
 
-alert("Passwords do not match");
+alert("Please fill all fields.");
 
 return;
 
 }
 
-try{
+if (password !== confirmPassword) {
 
-const userCredential =
-await createUserWithEmailAndPassword(
+alert("Passwords do not match.");
+
+return;
+
+}
+
+try {
+
+const userCredential = await createUserWithEmailAndPassword(
 auth,
 email,
 password
@@ -41,23 +44,23 @@ password
 
 const user = userCredential.user;
 
-await setDoc(doc(db,"users",user.uid),{
+await setDoc(doc(db, "users", user.uid), {
 
-name:name,
+name: name,
 
-email:email,
+email: email,
 
-createdAt:new Date().toISOString()
+createdAt: new Date().toISOString()
 
 });
 
-alert("Account Created Successfully!");
+alert("Account created successfully!");
 
-window.location.href="login.html";
+window.location.href = "login.html";
 
 }
 
-catch(error){
+catch (error) {
 
 alert(error.message);
 
