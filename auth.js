@@ -1,3 +1,13 @@
+import { auth, db } from "./firebase.js";
+
+import {
+  createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+import {
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 /*=========================================
  ClientFlow CRM v3.1
  auth.js - Part 1
