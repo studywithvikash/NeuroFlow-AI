@@ -1,38 +1,51 @@
-import { auth, db } from "./firebase.js";
-
-import {
-  createUserWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
-import {
-  doc,
-  setDoc
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 /*=========================================
- ClientFlow CRM v3.1
+ ClientFlow CRM v4.0
  auth.js - Part 1
 =========================================*/
 
-// ===== Password Toggle =====
+import { auth, db } from "./firebase.js";
 
-function togglePassword(inputId, buttonId) {
+import {
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+signOut,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-const input = document.getElementById(inputId);
-const button = document.getElementById(buttonId);
+import {
+doc,
+setDoc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-if (!input || !button) return;
 
-button.addEventListener("click", () => {
+// ==========================
+// PASSWORD TOGGLE
+// ==========================
 
-if (input.type === "password") {
+function togglePassword(inputId, buttonId){
 
-input.type = "text";
-button.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+const input=document.getElementById(inputId);
 
-} else {
+const button=document.getElementById(buttonId);
 
-input.type = "password";
-button.innerHTML = '<i class="fa-solid fa-eye"></i>';
+if(!input || !button) return;
+
+button.addEventListener("click",()=>{
+
+if(input.type==="password"){
+
+input.type="text";
+
+button.innerHTML='<i class="fa-solid fa-eye-slash"></i>';
+
+}else{
+
+input.type="password";
+
+button.innerHTML='<i class="fa-solid fa-eye"></i>';
 
 }
 
@@ -40,181 +53,194 @@ button.innerHTML = '<i class="fa-solid fa-eye"></i>';
 
 }
 
-togglePassword("loginPassword", "togglePassword");
-togglePassword("signupPassword", "toggleSignupPassword");
+togglePassword(
+"loginPassword",
+"togglePassword"
+);
+
+togglePassword(
+"signupPassword",
+"toggleSignupPassword"
+);
 
 
-// ===== Signup =====
+// ==========================
+// FIREBASE SIGNUP
+// ==========================
 
-const signupForm = document.getElementById("signupForm");
+const signupForm=
+document.getElementById("signupForm");
 
-if (signupForm) {
+if(signupForm){
 
-signupForm.addEventListener("submit", function (e) {
+signupForm.addEventListener(
+"submit",
+async(e)=>{
 
 e.preventDefault();
 
-const name = document.getElementById("signupName").value.trim();
-const email = document.getElementById("signupEmail").value.trim().toLowerCase();
-const password = document.getElementById("signupPassword").value;
-const confirm = document.getElementById("confirmPassword").value;
+const name=
+document.getElementById("signupName")
+.value.trim();
 
-if (password !== confirm) {
+const email=
+document.getElementById("signupEmail")
+.value.trim();
 
-alert("Passwords do not match.");
-return;
+const password=
+document.getElementById("signupPassword")
+.value;
 
-}
+const confirm=
+document.getElementById("confirmPassword")
+.value;
 
-let users = JSON.parse(localStorage.getItem("crmUsers")) || [];
+if(password!==confirm){
 
-// Check Existing Email
-
-const exists = users.find(user => user.email === email);
-
-if (exists) {
-
-alert("Email already registered.");
+alert("Passwords do not match");
 
 return;
 
 }
 
-// Save User
+try{
 
-users.push({
-
-name,
+const userCredential=
+await createUserWithEmailAndPassword(
+auth,
 email,
 password
+);
 
-});
+await setDoc(
 
-localStorage.setItem("crmUsers", JSON.stringify(users));
+doc(
+db,
+"users",
+userCredential.user.uid
+),
 
-alert("Account created successfully!");
+{
 
-window.location.href = "login.html";
+name:name,
+
+email:email,
+
+createdAt:
+new Date().toISOString()
+
+}
+
+);
+
+alert("Account Created Successfully");
+
+window.location.href="login.html";
+
+}
+
+catch(error){
+
+alert(error.message);
+
+}
 
 });
 
 }
 /*=========================================
- ClientFlow CRM v3.1
+ ClientFlow CRM v4.0
  auth.js - Part 2
 =========================================*/
 
-// ===== Login =====
+// ==========================
+// FIREBASE LOGIN
+// ==========================
 
 const loginForm = document.getElementById("loginForm");
 
 if (loginForm) {
 
-loginForm.addEventListener("submit", function(e){
+loginForm.addEventListener("submit", async (e) => {
 
 e.preventDefault();
 
 const email =
 document.getElementById("loginEmail")
-.value.trim().toLowerCase();
+.value.trim();
 
 const password =
 document.getElementById("loginPassword")
 .value;
 
-const remember =
-document.getElementById("rememberMe").checked;
+try {
 
-const users =
-JSON.parse(localStorage.getItem("crmUsers")) || [];
-
-// Find User
-
-const user = users.find(u=>
-
-u.email===email &&
-u.password===password
-
+const userCredential =
+await signInWithEmailAndPassword(
+auth,
+email,
+password
 );
 
-if(!user){
+const uid = userCredential.user.uid;
 
-alert("Invalid Email or Password");
+const userRef = doc(db,"users",uid);
 
-return;
+const snap = await getDoc(userRef);
 
-}
-
-// Login Success
-
-localStorage.setItem(
-"crmLoggedIn",
-"true"
-);
+if(snap.exists()){
 
 localStorage.setItem(
 "currentUser",
-JSON.stringify(user)
-);
-
-localStorage.setItem(
-"lastActivity",
-Date.now()
-);
-
-if(remember){
-
-localStorage.setItem(
-"rememberUser",
-email
-);
-
-}else{
-
-localStorage.removeItem(
-"rememberUser"
+JSON.stringify(snap.data())
 );
 
 }
 
-alert("Login Successful!");
+alert("Login Successful");
 
 window.location.href="index.html";
+
+}
+
+catch(error){
+
+alert(error.message);
+
+}
 
 });
 
 }
 
-// ===== Remember Me =====
 
-const rememberedEmail =
-localStorage.getItem("rememberUser");
+// ==========================
+// AUTH STATE
+// ==========================
 
-if(
-rememberedEmail &&
-document.getElementById("loginEmail")
-){
-
-document.getElementById("loginEmail")
-.value = rememberedEmail;
-
-document.getElementById("rememberMe")
-.checked = true;
-
-}
-
-// ===== Dashboard Protection =====
+onAuthStateChanged(auth,(user)=>{
 
 const page =
 window.location.pathname
 .split("/")
 .pop();
 
-if(page==="index.html" || page===""){
+if(user){
 
 if(
-localStorage.getItem("crmLoggedIn")
-!=="true"
+page==="login.html" ||
+page==="signup.html"
+){
+
+window.location.href="index.html";
+
+}
+
+}else{
+
+if(
+page==="index.html" ||
+page===""
 ){
 
 window.location.href="login.html";
@@ -223,123 +249,128 @@ window.location.href="login.html";
 
 }
 
-// ===== Current User =====
+});
+
+
+// ==========================
+// PROFILE NAME
+// ==========================
+
+const profileName =
+document.getElementById("profileName");
 
 const currentUser =
 JSON.parse(
 localStorage.getItem("currentUser")
 );
 
-if(currentUser){
-
-const profileName =
-document.getElementById("profileName");
-
-if(profileName){
+if(profileName && currentUser){
 
 profileName.textContent =
 currentUser.name;
 
 }
-
- /*=========================================
- ClientFlow CRM v3.1
- auth.js - Part 3
+/*=========================================
+ ClientFlow CRM v4.0
+ auth.js - Part 3 (Final)
 =========================================*/
 
-// ===== Logout =====
+// ==========================
+// FIREBASE LOGOUT
+// ==========================
 
-function logout(){
+const logoutBtn = document.getElementById("logoutBtn");
 
-localStorage.removeItem("crmLoggedIn");
+if (logoutBtn) {
+
+logoutBtn.addEventListener("click", async () => {
+
+try {
+
+await signOut(auth);
+
 localStorage.removeItem("currentUser");
 
-alert("Logged out successfully!");
+alert("Logged out successfully");
 
-window.location.href="login.html";
-
-}
-
-// Logout Button
-
-const logoutBtn =
-document.getElementById("logoutBtn");
-
-if(logoutBtn){
-
-logoutBtn.addEventListener("click",logout);
+window.location.href = "login.html";
 
 }
 
-// ===== Session Timeout =====
+catch(error){
 
-const SESSION_TIME = 30 * 60 * 1000; // 30 Minutes
+alert(error.message);
 
-function updateActivity(){
+}
 
-if(localStorage.getItem("crmLoggedIn")==="true"){
+});
+
+}
+
+
+// ==========================
+// REMEMBER ME
+// ==========================
+
+const rememberCheck =
+document.getElementById("rememberMe");
+
+const emailInput =
+document.getElementById("loginEmail");
+
+if(localStorage.getItem("rememberEmail") && emailInput){
+
+emailInput.value =
+localStorage.getItem("rememberEmail");
+
+rememberCheck.checked = true;
+
+}
+
+if(loginForm){
+
+loginForm.addEventListener("submit",()=>{
+
+if(rememberCheck.checked){
 
 localStorage.setItem(
-"lastActivity",
-Date.now()
+"rememberEmail",
+emailInput.value
+);
+
+}else{
+
+localStorage.removeItem(
+"rememberEmail"
 );
 
 }
 
-}
-
-function checkSession(){
-
-if(localStorage.getItem("crmLoggedIn")!=="true"){
-
-return;
-
-}
-
-const last =
-Number(localStorage.getItem("lastActivity")) || 0;
-
-if(Date.now()-last > SESSION_TIME){
-
-alert("Session expired. Please login again.");
-
-logout();
-
-}
-
-}
-
-// Track Activity
-
-["click","keydown","mousemove","scroll","touchstart"]
-.forEach(event=>{
-
-document.addEventListener(event,updateActivity);
-
 });
 
-// Check Every Minute
+}
 
-setInterval(checkSession,60000);
 
-// ===== Welcome =====
+// ==========================
+// AUTO FOCUS
+// ==========================
 
-window.addEventListener("load",()=>{
+const firstInput =
+document.querySelector("input");
 
-const user =
-JSON.parse(localStorage.getItem("currentUser"));
+if(firstInput){
 
-if(user){
-
-console.log("Welcome " + user.name);
+firstInput.focus();
 
 }
 
-});
 
-// ===== Enter Key Support =====
+// ==========================
+// ENTER KEY SUPPORT
+// ==========================
 
-document.querySelectorAll("input").forEach(input=>{
+document.querySelectorAll("input")
+.forEach(input=>{
 
 input.addEventListener("keydown",(e)=>{
 
@@ -361,26 +392,67 @@ form.requestSubmit();
 
 });
 
-// ===== Auto Focus =====
 
-const firstInput =
-document.querySelector("input");
+// ==========================
+// SESSION TIMER
+// ==========================
 
-if(firstInput){
+let sessionTimer;
 
-firstInput.focus();
+function resetTimer(){
+
+clearTimeout(sessionTimer);
+
+sessionTimer = setTimeout(async()=>{
+
+if(auth.currentUser){
+
+await signOut(auth);
+
+alert("Session expired.");
+
+window.location.href="login.html";
 
 }
 
-// ===== Auto Form Reset =====
+},30*60*1000);
 
-window.addEventListener("pageshow",()=>{
-
-document.querySelectorAll("form").forEach(form=>{
-
-form.reset();
-
-});
-
-});
 }
+
+["click","mousemove","keydown","scroll","touchstart"]
+
+.forEach(event=>{
+
+document.addEventListener(
+
+event,
+
+resetTimer
+
+);
+
+});
+
+resetTimer();
+
+
+// ==========================
+// WELCOME MESSAGE
+// ==========================
+
+window.addEventListener("load",()=>{
+
+const user =
+JSON.parse(
+localStorage.getItem("currentUser")
+);
+
+if(user){
+
+console.log(
+"Welcome " + user.name
+);
+
+}
+
+});
