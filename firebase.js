@@ -9,7 +9,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: apiKey: "AIzaSyAflFP20uHV4BwgpLnZnWsapjzx8UOHPXk",
+  apiKey: "AIzaSyAflFP20uHV4BwgpLnZnWsapjzx8UOHPXk",
   authDomain: "clientflow-crm-5a739.firebaseapp.com",
   projectId: "clientflow-crm-5a739",
   storageBucket: "clientflow-crm-5a739.firebasestorage.app",
