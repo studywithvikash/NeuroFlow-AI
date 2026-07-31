@@ -1,6 +1,7 @@
 /*=========================================
  ClientFlow CRM v4.0
- auth.js - Part 1
+ Final Firebase Authentication
+ Part 1
 =========================================*/
 
 import { auth, db } from "./firebase.js";
@@ -9,23 +10,39 @@ import {
 createUserWithEmailAndPassword,
 signInWithEmailAndPassword,
 signOut,
-onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+onAuthStateChanged,
+setPersistence,
+browserLocalPersistence,
+browserSessionPersistence
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 import {
 doc,
 setDoc,
 getDoc
-}
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
-// ==========================
+// ===============================
+// DOM ELEMENTS
+// ===============================
+
+const loginForm=document.getElementById("loginForm");
+
+const signupForm=document.getElementById("signupForm");
+
+const logoutBtn=document.getElementById("logoutBtn");
+
+const profileName=document.getElementById("profileName");
+
+const rememberMe=document.getElementById("rememberMe");
+
+
+// ===============================
 // PASSWORD TOGGLE
-// ==========================
+// ===============================
 
-function togglePassword(inputId, buttonId){
+function setupPasswordToggle(inputId,buttonId){
 
 const input=document.getElementById(inputId);
 
@@ -39,13 +56,15 @@ if(input.type==="password"){
 
 input.type="text";
 
-button.innerHTML='<i class="fa-solid fa-eye-slash"></i>';
+button.innerHTML=
+'<i class="fa-solid fa-eye-slash"></i>';
 
 }else{
 
 input.type="password";
 
-button.innerHTML='<i class="fa-solid fa-eye"></i>';
+button.innerHTML=
+'<i class="fa-solid fa-eye"></i>';
 
 }
 
@@ -53,51 +72,106 @@ button.innerHTML='<i class="fa-solid fa-eye"></i>';
 
 }
 
-togglePassword(
+setupPasswordToggle(
 "loginPassword",
 "togglePassword"
 );
 
-togglePassword(
+setupPasswordToggle(
 "signupPassword",
 "toggleSignupPassword"
 );
 
 
-// ==========================
-// FIREBASE SIGNUP
-// ==========================
+// ===============================
+// TOAST
+// ===============================
 
-const signupForm=
-document.getElementById("signupForm");
+function showToast(message){
+
+const toast=document.getElementById("toast");
+
+if(!toast){
+
+alert(message);
+
+return;
+
+}
+
+toast.textContent=message;
+
+toast.classList.add("show");
+
+setTimeout(()=>{
+
+toast.classList.remove("show");
+
+},3000);
+
+}
+
+
+// ===============================
+// LOADING
+// ===============================
+
+function showLoading(){
+
+const loader=
+document.getElementById("loadingScreen");
+
+if(loader){
+
+loader.style.display="flex";
+
+}
+
+}
+
+function hideLoading(){
+
+const loader=
+document.getElementById("loadingScreen");
+
+if(loader){
+
+loader.style.display="none";
+
+}
+
+}
+/*=========================================
+ ClientFlow CRM v4.0
+ Final Firebase Authentication
+ Part 2
+=========================================*/
+
+// ===============================
+// FIREBASE SIGNUP
+// ===============================
 
 if(signupForm){
 
-signupForm.addEventListener(
-"submit",
-async(e)=>{
+signupForm.addEventListener("submit",async(e)=>{
 
 e.preventDefault();
 
-const name=
-document.getElementById("signupName")
-.value.trim();
+showLoading();
 
-const email=
-document.getElementById("signupEmail")
-.value.trim();
+const name=document.getElementById("signupName").value.trim();
 
-const password=
-document.getElementById("signupPassword")
-.value;
+const email=document.getElementById("signupEmail").value.trim();
 
-const confirm=
-document.getElementById("confirmPassword")
-.value;
+const password=document.getElementById("signupPassword").value;
+
+const confirm=document.getElementById("confirmPassword").value;
 
 if(password!==confirm){
 
-alert("Passwords do not match");
+hideLoading();
+
+showToast("Passwords do not match");
 
 return;
 
@@ -105,7 +179,7 @@ return;
 
 try{
 
-const userCredential=
+const credential=
 await createUserWithEmailAndPassword(
 auth,
 email,
@@ -113,80 +187,82 @@ password
 );
 
 await setDoc(
-
-doc(
-db,
-"users",
-userCredential.user.uid
-),
-
+doc(db,"users",credential.user.uid),
 {
-
 name:name,
-
 email:email,
-
-createdAt:
-new Date().toISOString()
-
+createdAt:new Date().toISOString()
 }
-
 );
 
-alert("Account Created Successfully");
+hideLoading();
+
+showToast("Account Created Successfully");
+
+setTimeout(()=>{
 
 window.location.href="login.html";
 
-}
+},1000);
 
-catch(error){
+}catch(error){
 
-alert(error.message);
+hideLoading();
+
+showToast(error.message);
 
 }
 
 });
 
 }
-/*=========================================
- ClientFlow CRM v4.0
- auth.js - Part 2
-=========================================*/
 
-// ==========================
+
+// ===============================
 // FIREBASE LOGIN
-// ==========================
+// ===============================
 
-const loginForm = document.getElementById("loginForm");
+if(loginForm){
 
-if (loginForm) {
-
-loginForm.addEventListener("submit", async (e) => {
+loginForm.addEventListener("submit",async(e)=>{
 
 e.preventDefault();
 
-const email =
-document.getElementById("loginEmail")
-.value.trim();
+showLoading();
 
-const password =
-document.getElementById("loginPassword")
-.value;
+const email=document.getElementById("loginEmail").value.trim();
 
-try {
+const password=document.getElementById("loginPassword").value;
 
-const userCredential =
+try{
+
+if(rememberMe && rememberMe.checked){
+
+await setPersistence(
+auth,
+browserLocalPersistence
+);
+
+}else{
+
+await setPersistence(
+auth,
+browserSessionPersistence
+);
+
+}
+
+const credential=
 await signInWithEmailAndPassword(
 auth,
 email,
 password
 );
 
-const uid = userCredential.user.uid;
-
-const userRef = doc(db,"users",uid);
-
-const snap = await getDoc(userRef);
+const snap=
+await getDoc(
+doc(db,"users",credential.user.uid)
+);
 
 if(snap.exists()){
 
@@ -197,28 +273,38 @@ JSON.stringify(snap.data())
 
 }
 
-alert("Login Successful");
+hideLoading();
+
+showToast("Login Successful");
+
+setTimeout(()=>{
 
 window.location.href="index.html";
 
-}
+},800);
 
-catch(error){
+}catch(error){
 
-alert(error.message);
+hideLoading();
+
+showToast(error.message);
 
 }
 
 });
 
 }
+/*=========================================
+ ClientFlow CRM v4.0
+ Final Firebase Authentication
+ Part 3
+=========================================*/
 
-
-// ==========================
+// ===============================
 // AUTH STATE
-// ==========================
+// ===============================
 
-onAuthStateChanged(auth,(user)=>{
+onAuthStateChanged(auth, async(user)=>{
 
 const page =
 window.location.pathname
@@ -226,6 +312,36 @@ window.location.pathname
 .pop();
 
 if(user){
+
+try{
+
+const snap = await getDoc(
+doc(db,"users",user.uid)
+);
+
+if(snap.exists()){
+
+const data = snap.data();
+
+localStorage.setItem(
+"currentUser",
+JSON.stringify(data)
+);
+
+if(profileName){
+
+profileName.textContent =
+data.name;
+
+}
+
+}
+
+}catch(err){
+
+console.error(err);
+
+}
 
 if(
 page==="login.html" ||
@@ -237,6 +353,8 @@ window.location.href="index.html";
 }
 
 }else{
+
+localStorage.removeItem("currentUser");
 
 if(
 page==="index.html" ||
@@ -252,54 +370,33 @@ window.location.href="login.html";
 });
 
 
-// ==========================
-// PROFILE NAME
-// ==========================
+// ===============================
+// LOGOUT
+// ===============================
 
-const profileName =
-document.getElementById("profileName");
+if(logoutBtn){
 
-const currentUser =
-JSON.parse(
-localStorage.getItem("currentUser")
-);
+logoutBtn.addEventListener("click",async()=>{
 
-if(profileName && currentUser){
-
-profileName.textContent =
-currentUser.name;
-
-}
-/*=========================================
- ClientFlow CRM v4.0
- auth.js - Part 3 (Final)
-=========================================*/
-
-// ==========================
-// FIREBASE LOGOUT
-// ==========================
-
-const logoutBtn = document.getElementById("logoutBtn");
-
-if (logoutBtn) {
-
-logoutBtn.addEventListener("click", async () => {
-
-try {
+try{
 
 await signOut(auth);
 
-localStorage.removeItem("currentUser");
+localStorage.removeItem(
+"currentUser"
+);
 
-alert("Logged out successfully");
+showToast("Logged Out");
 
-window.location.href = "login.html";
+setTimeout(()=>{
 
-}
+window.location.href="login.html";
 
-catch(error){
+},800);
 
-alert(error.message);
+}catch(error){
+
+showToast(error.message);
 
 }
 
@@ -308,52 +405,55 @@ alert(error.message);
 }
 
 
-// ==========================
-// REMEMBER ME
-// ==========================
+// ===============================
+// SESSION TIMER
+// ===============================
 
-const rememberCheck =
-document.getElementById("rememberMe");
+let sessionTimer;
 
-const emailInput =
-document.getElementById("loginEmail");
+function resetSession(){
 
-if(localStorage.getItem("rememberEmail") && emailInput){
+clearTimeout(sessionTimer);
 
-emailInput.value =
-localStorage.getItem("rememberEmail");
+sessionTimer=setTimeout(async()=>{
 
-rememberCheck.checked = true;
+if(auth.currentUser){
 
-}
-
-if(loginForm){
-
-loginForm.addEventListener("submit",()=>{
-
-if(rememberCheck.checked){
-
-localStorage.setItem(
-"rememberEmail",
-emailInput.value
-);
-
-}else{
+await signOut(auth);
 
 localStorage.removeItem(
-"rememberEmail"
+"currentUser"
 );
 
+window.location.href="login.html";
+
 }
+
+},30*60*1000);
+
+}
+
+[
+"click",
+"mousemove",
+"keydown",
+"touchstart",
+"scroll"
+].forEach(event=>{
+
+document.addEventListener(
+event,
+resetSession
+);
 
 });
 
-}
+resetSession();
 
 
-// ==========================
+// ===============================
 // AUTO FOCUS
-// ==========================
+// ===============================
 
 const firstInput =
 document.querySelector("input");
@@ -365,18 +465,22 @@ firstInput.focus();
 }
 
 
-// ==========================
+// ===============================
 // ENTER KEY SUPPORT
-// ==========================
+// ===============================
 
-document.querySelectorAll("input")
+document
+.querySelectorAll("input")
 .forEach(input=>{
 
-input.addEventListener("keydown",(e)=>{
+input.addEventListener(
+"keydown",
+(e)=>{
 
 if(e.key==="Enter"){
 
-const form=input.closest("form");
+const form =
+input.closest("form");
 
 if(form){
 
@@ -393,66 +497,10 @@ form.requestSubmit();
 });
 
 
-// ==========================
-// SESSION TIMER
-// ==========================
-
-let sessionTimer;
-
-function resetTimer(){
-
-clearTimeout(sessionTimer);
-
-sessionTimer = setTimeout(async()=>{
-
-if(auth.currentUser){
-
-await signOut(auth);
-
-alert("Session expired.");
-
-window.location.href="login.html";
-
-}
-
-},30*60*1000);
-
-}
-
-["click","mousemove","keydown","scroll","touchstart"]
-
-.forEach(event=>{
-
-document.addEventListener(
-
-event,
-
-resetTimer
-
-);
-
-});
-
-resetTimer();
-
-
-// ==========================
-// WELCOME MESSAGE
-// ==========================
-
-window.addEventListener("load",()=>{
-
-const user =
-JSON.parse(
-localStorage.getItem("currentUser")
-);
-
-if(user){
+// ===============================
+// READY
+// ===============================
 
 console.log(
-"Welcome " + user.name
+"ClientFlow CRM Firebase Auth Loaded Successfully"
 );
-
-}
-
-});
