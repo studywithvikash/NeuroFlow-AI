@@ -154,7 +154,15 @@ loader.style.display="none";
 
 if(signupForm){
 
+alert("Signup form found");
+
 signupForm.addEventListener("submit",async(e)=>{
+
+alert("Signup clicked");
+
+e.preventDefault();
+
+showLoading();
 
 e.preventDefault();
 
