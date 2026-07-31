@@ -187,7 +187,7 @@ return;
 }
 
 try{
-
+alert("Before Firebase");
 const credential=
 await createUserWithEmailAndPassword(
 auth,
