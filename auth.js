@@ -5,7 +5,8 @@
 =========================================*/
 
 import { auth, db } from "./firebase.js";
-
+console.log("AUTH JS LOADED");
+alert("AUTH JS LOADED");
 import {
 createUserWithEmailAndPassword,
 signInWithEmailAndPassword,
