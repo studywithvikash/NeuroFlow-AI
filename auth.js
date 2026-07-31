@@ -189,7 +189,7 @@ return;
 try{
 alert("Before Firebase");
 const credential=
-await createUserWithEmailAndPassword(
+await createUserWithEmailAndPasswordalert("After Firebase");(
 auth,
 email,
 password
