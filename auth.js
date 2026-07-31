@@ -215,7 +215,9 @@ window.location.href="login.html";
 },1000);
 
 }catch(error){
-
+alert(error.code);
+alert(error.message);
+console.error(error);
 hideLoading();
 
 showToast(error.message);
