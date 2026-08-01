@@ -186,14 +186,46 @@ return;
 
 }
 
-try{
-alert("Before Firebase");
-const credential=
-await createUserWithEmailAndPasswordalert("After Firebase");(
-auth,
-email,
-password
-);
+try {
+
+    alert("Before Firebase");
+
+    const credential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+    );
+
+    alert("After Firebase");
+
+    await setDoc(
+        doc(db, "users", credential.user.uid),
+        {
+            name: name,
+            email: email,
+            createdAt: new Date().toISOString()
+        }
+    );
+
+    hideLoading();
+
+    showToast("Account Created Successfully");
+
+    setTimeout(() => {
+        window.location.href = "login.html";
+    }, 1000);
+
+} catch (error) {
+
+    alert(error.code);
+    alert(error.message);
+    console.error(error);
+
+    hideLoading();
+
+    showToast(error.message);
+
+}
 
 await setDoc(
 doc(db,"users",credential.user.uid),
